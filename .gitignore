@@ -1,0 +1,28 @@
+# Sensitive files
+config/.env.device-secrets
+*.env
+
+# Logs
+*.log
+
+# Node.js
+node_modules/
+dist/
+build/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Docker
+*.dockerignore
+docker-compose.override.yml
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+venv/
+.env
