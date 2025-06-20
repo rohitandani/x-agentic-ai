@@ -1,0 +1,41 @@
+receivers:
+  bigip/1:
+    endpoint: "https://10.0.0.1"
+    username: "${env:BIGIP_USERNAME_1}"
+    password: "${env:BIGIP_PASSWORD_1}"
+    collection_interval: 60s
+  bigip/2:
+    endpoint: "https://10.0.0.2"
+    username: "${env:BIGIP_USERNAME_1}"
+    password: "${env:BIGIP_PASSWORD_2}"
+  syslog:
+    tcp:
+      listen_address: "0.0.0.0:54527"
+    protocol: rfc3164
+    location: UTC
+    operators:
+      - type: move
+        from: attributes.message
+        to: body
+      - type: json_parser
+        timestamp:
+          parse_from: attributes.time
+          layout: '%Y-%m-%d %H:%M:%S'
+processors:
+  batch:
+exporters:
+  prometheus:
+    endpoint: "0.0.0.0:9090"
+  # Optional: Add logging exporter for Syslog
+  # logging:
+  #   verbosity: detailed
+service:
+  pipelines:
+    metrics:
+      receivers: [bigip/1, bigip/2]
+      processors: [batch]
+      exporters: [prometheus]
+    logs:
+      receivers: [syslog]
+      processors: [batch]
+      exporters: [prometheus]

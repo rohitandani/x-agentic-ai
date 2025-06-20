@@ -1,0 +1,15 @@
+service:
+  pipelines:
+    metrics:
+      receivers: [bigip/1, bigip/2]
+      processors: [batch/local]
+      exporters: [otlphttp/metrics-local, debug/x-agentic-ai]
+    logs:
+      receivers: [syslog]
+      processors: [batch/local]
+      exporters: [debug/x-agentic-ai]
+    # Optional: F5 Datafabric pipeline
+    # metrics/f5-datafabric:
+    #   receivers: [bigip/1, bigip/2]
+    #   processors: [batch/f5-datafabric, interval/f5-datafabric, attributes/f5-datafabric]
+    #   exporters: [otlp/f5-datafabric]

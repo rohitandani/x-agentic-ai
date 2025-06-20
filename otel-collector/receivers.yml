@@ -1,0 +1,26 @@
+receivers:
+  bigip/1:
+    endpoint: https://10.0.0.1
+    username: "${env:BIGIP_USERNAME_1}"
+    password: "${env:BIGIP_PASSWORD_1}"
+    collection_interval: 60s
+    timeout: 60s
+  bigip/2:
+    endpoint: https://10.0.0.2
+    username: "${env:BIGIP_USERNAME_1}"
+    password: "${env:BIGIP_PASSWORD_2}"
+    collection_interval: 60s
+    timeout: 60s
+  syslog:
+    tcp:
+      listen_address: "0.0.0.0:54527"
+    protocol: rfc3164
+    location: UTC
+    operators:
+      - type: move
+        from: attributes.message
+        to: body
+      - type: json_parser
+        timestamp:
+          parse_from: attributes.time
+          layout: '%Y-%m-%d %H:%M:%S'

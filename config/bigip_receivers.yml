@@ -1,0 +1,13 @@
+# Device-specific configurations for x-agentic-ai
+# Values inherit from x_agentic_ai_defaults.yaml unless overridden
+bigip/1:
+  endpoint: https://10.0.0.1
+  username: admin
+  password: "${env:BIGIP_PASSWORD_1}"
+  # Example override
+  # collection_interval: 30s
+  # data_types:
+  #   f5.dns:
+  #     enabled: false
+bigip/2:
+  endpoint: https://10.0.0.2

@@ -1,0 +1,9 @@
+# Default configurations for x-agentic-ai tool
+# Applied to all BIG-IP devices unless overridden in bigip_receivers.yaml
+bigip_receiver_defaults:
+  collection_interval: 60s
+  username: admin
+  password: "${env:BIGIP_PASSWORD_1}"
+  timeout: 60s
+  # Data types can be enabled/disabled (e.g., f5.dns, f5.gtm)
+  # See documentation for available data types
