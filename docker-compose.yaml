@@ -1,37 +1,35 @@
 version: '3.8'
-services:
-  otel-collector:
-    image: otel/opentelemetry-collector-contrib:latest
-    volumes:
-      - ./otel-collector/x-robot-data.yaml:/etc/otelcol-contrib/config.yaml
-      - ./otel-collector/receivers.yml:/etc/otelcol-contrib/receivers.yaml
-      - ./otel-collector/pipelines/pipelines.yml:/etc/otelcol-contrib/pipelines.yaml
-      - ./config/.env.device:/etc/otelcol-contrib/.env.device-secrets
-      - ./src:/app/src
-    ports:
-      - "54527:54527" # Syslog receiver
-      - "4317:4317"   # OTLP
-      - "8888:8888"   # Collector telemetry
-      - "9090:9090"   # Prometheus exporter
-    environment:
-      - BIGIP_PASSWORD_1=${BIGIP_PASSWORD_1}
-      - BIGIP_USERNAME_1=${BIGIP_USERNAME_1}
-      - BIGIP_PASSWORD_2=${BIGIP_PASSWORD_2}
-      # Optional: - SENSOR_ID=${SENSOR_ID}
-      # Optional: - SENSOR_SECRET_TOKEN=${SENSOR_SECRET_TOKEN}
-    depends_on:
-      - prometheus
-  prometheus:
-    image: prom/prometheus:latest
-    volumes:
-      - ./config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-    ports:
-      - "9090:9090"
-  dashboard:
-    build:
-      context: .
-      dockerfile: debug.log
-    ports:
-      - "3000:3000"
-    depends_on:
-      - prometheus
+   services:
+     otel-collector:
+       image: otel/opentelemetry-collector-contrib:latest
+       volumes:
+         - ./otel-collector/x-agentic-ai-scraper-config.yaml:/etc/otelcol-contrib/config.yaml
+         - ./otel-collector/receivers.yml:/etc/otelcol-contrib/receivers.yaml
+         - ./otel-collector/pipelines/pipelines.yml:/etc/otelcol-contrib/pipelines.yaml
+         - ./config/.env.device-secrets:/etc/otelcol-contrib/.env.device-secrets
+         - ./src:/app/src
+       ports:
+         - "54527:54527" # Syslog receiver
+         - "4317:4317"   # OTLP
+         - "8888:8888"   # Collector telemetry
+         - "9090:9090"   # Prometheus exporter
+       environment:
+         - BIGIP_PASSWORD_1=${BIGIP_PASSWORD_1}
+         - BIGIP_USERNAME_1=${BIGIP_USERNAME_1}
+         - BIGIP_PASSWORD_2=${BIGIP_PASSWORD_2}
+       depends_on:
+         - prometheus
+     prometheus:
+       image: prom/prometheus:latest
+       volumes:
+         - ./config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+       ports:
+         - "9090:9090"
+     dashboard:
+       build:
+         context: .
+         dockerfile: Dockerfile
+       ports:
+         - "3000:3000"
+       depends_on:
+         - prometheus
